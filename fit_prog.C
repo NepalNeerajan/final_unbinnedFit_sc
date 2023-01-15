@@ -508,6 +508,7 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
     RooCurve *curve_n1 = (RooCurve*)xframe1->getCurve("n1decay_mod");
     RooCurve *curve_n2 = (RooCurve*)xframe2->getCurve("n2decay_mod");
   
+    //for the first canvas
     Double_t chisqua=0;
     Double_t xres[10000];
     Double_t yres[10000];
@@ -535,8 +536,42 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
     Double_t chi2_over_ndf = chisqua/(1999-res->floatParsFinal().getSize());
     //1999 is total bins from 5 to 10000 ms
     
-    //TGraphErrors *res_tot = new TGraphErrors(hist_total->GetN(),xres,yres);
+    //for decay spectra with 1n emission
+    Double_t chisqua_n1=0;
+    Double_t chiVal_n1 = 0, logVal_n1 = 0;
+    for (Int_t i=0;i<hist_n1->GetN();i++){
+        Double_t xi_n1=hist_n1->GetX()[i];
+        Double_t yi_n1=hist_n1->GetY()[i];
+        Double_t yeval_n1=curve_n1->Eval(xi);
+        Double_t reldev_n1=yeval_n1-yi_n1;
+	if(yi_n1 !=0 && yeval_n1 != 0) logVal_n1 = TMath::Log(yi_n1/yeval_n1); else logVal_n1 = 0;
+       	chiVal_n1=yeval_n1-yi_n1+yi_n1*logVal_n1;
+        chisqua_n1 += chiVal_n1;
+    }
+   chisqua_n1=2*chisqua_n1;
+   cout<<"chi2 = "<<chisqua_n1<<endl;
+   cout<<"ndf="<<res->floatParsFinal().getSize()<<endl;
+   cout<<"chisquare/ndf for 1n emi ="<<chisqua_n1/(1999-res->floatParsFinal().getSize())<<endl;
+   Double_t chi2_over_ndf_n1 = chisqua_n1/(1999-res->floatParsFinal().getSize());
 
+
+   //for decay spectra with 2n emission
+   Double_t chisqua_n2=0;
+   Double_t chiVal_n2 = 0, logVal_n2 = 0;
+   for (Int_t i=0;i<hist_n2->GetN();i++){
+     Double_t xi_n2=hist_n2->GetX()[i];
+     Double_t yi_n2=hist_n2->GetY()[i];
+     Double_t yeval_n2=curve_n2->Eval(xi);
+     Double_t reldev_n2=yeval_n2-yi_n2;
+     if(yi_n2 !=0 && yeval_n2 != 0) logVal_n2 = TMath::Log(yi_n2/yeval_n2); else logVal_n2 = 0;
+     chiVal_n2=yeval_n2-yi_n2+yi_n2*logVal_n2;
+     chisqua_n2 += chiVal_n2;
+   }
+   chisqua_n2=2*chisqua_n2;
+   cout<<"chi2 = "<<chisqua_n2<<endl;
+   cout<<"ndf="<<res->floatParsFinal().getSize()<<endl;
+   cout<<"chisquare/ndf for 2n emi ="<<chisqua_n2/(1999-res->floatParsFinal().getSize())<<endl;
+   Double_t chi2_over_ndf_n2 = chisqua_n2/(1999-res->floatParsFinal().getSize());
     
     
     cout<<"///////////////////////////////"<<endl;

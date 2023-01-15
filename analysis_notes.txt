@@ -2,6 +2,9 @@ date: Jan 13, 2023
 -> This directory is created, the unbinned fit functins will be modified as discussed from last meeting
 TO DO:
 (1) calculate chi2/ndf for all three decay histograms
+done, in local computer
+remains, to check in cmich computer
+
 (2) get number of degrees of freedom consistently (rather than hard coded)
 (3) all plot with fit residuals going up to 10 second (or the upper limit of fit)
 (4) add histogram of negative times and plot on tto of it the background function; it could be tricky! 
