@@ -439,7 +439,7 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
 
 
     //to pull chi2 value from the plot
-    Double_t chi2_td = xframet->chiSquare(42);
+    //Double_t chi2_td = xframet->chiSquare(42); //this line is commented as this is not proper way to measure the chi2
     
     RooPlot *xframe0 = decay_time.frame(Title("decay with 0n delayed"));
     decaydata->plotOn(xframe0,Cut("neu_mult==neu_mult::0neutron"),Binning(tbins),DataError(RooAbsData::SumW2),RooFit::Name("n0decay"));
@@ -496,7 +496,8 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
     c2n->Write();
     //fOut->Close();
 
-    //to calculate chi2 for each of the canvas
+
+    //to calculate chi2 for each of the canvas //todo: need find the paper that describes this method of calculating chi2/ndf
 
     RooHist *hist_total = (RooHist*)xframet->getHist("totaldecay");
     RooHist *hist_n0 = (RooHist*)xframe0->getHist("n0decay");
@@ -508,7 +509,7 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
     RooCurve *curve_n1 = (RooCurve*)xframe1->getCurve("n1decay_mod");
     RooCurve *curve_n2 = (RooCurve*)xframe2->getCurve("n2decay_mod");
   
-    //for the first canvas
+    //for the first canvas //for decay spectra with out any neutron gate or conditions
     Double_t chisqua=0;
     Double_t xres[10000];
     Double_t yres[10000];
@@ -522,20 +523,21 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
         Double_t reldev=yeval-yi;
 	if(yi !=0 && yeval != 0) logVal = TMath::Log(yi/yeval); else logVal = 0;
        	chiVal=yeval-yi+yi*logVal;
-	//	cout<<"chiVal = "<<chiVal<<endl;
-	//	cout<<"log Val = "<<logVal<<endl;
-	//	cout<<"chisquare ==  "<<chisqua<<endl;
-	//	Double_t chisquarei=yeval-yi+yi*TMath::Log(yi/yeval);
         chisqua += chiVal;
-    }
-    
+    }    
     chisqua=2*chisqua;
     cout<<"chi2 = "<<chisqua<<endl;
     cout<<"ndf="<<res->floatParsFinal().getSize()<<endl;
     cout<<"chisquare/ndf="<<chisqua/(1999-res->floatParsFinal().getSize())<<endl;
     Double_t chi2_over_ndf = chisqua/(1999-res->floatParsFinal().getSize());
     //1999 is total bins from 5 to 10000 ms
-    
+    //lets check if GetNbinsX provides the total number of bins with the given range
+    Int_t test1 = hist_total->GetNbinsX();
+    Int_t test2 = hist_total->GetN();
+    cout<<"test1 NbinsX = "<<test1<<endl;
+    cout<<"test2 N = "<<test2<<endl;    
+
+
     //for decay spectra with 1n emission
     Double_t chisqua_n1=0;
     Double_t chiVal_n1 = 0, logVal_n1 = 0;
@@ -1114,7 +1116,7 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
     myfile<<"1 means lower band uncertainty of neutron eff"<<endl;
     myfile<<"2 means higher band uncertainty of neutron eff"<<endl;
 	
-    myfile<<"\n\nchi2 = "<<chi2_td<<endl;
+    //myfile<<"\n\nchi2 = "<<chi2_td<<endl; //this is not the correct way to get chi2, use values from manual method //commented on Jan15, 2023
     myfile<<"Neu Eff = "<<neuEff.getVal()<<endl;
     myfile<<"Neu Eff of for two delayed neutrons = "<<neudEff.getVal()<<endl;    
     myfile<<"N0 = "<<N0.getVal()<<endl;
@@ -1130,6 +1132,9 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
     myfile<<"bkg1 = "<<bkg1.getVal()<<endl;
     myfile<<"bkg2 = "<<bkg2.getVal()<<endl;
     myfile<<"bkg3 = "<<bkg3.getVal()<<endl;
+
+    myfile<<"test1 NbinsX= "<<test1<<endl;
+    myfile<<"test2 N= "<<test2<<endl;
 
     myfile<<"\n\n\n Used fitting parameters ---->"<<endl;
     myfile<<"\n\nIsotope A, T_1/2 = "<<T[isoA]<<"\tP1n = "<<Pn[isoA]<<"\tP2n = "<<Pnn[isoA]<<endl;
