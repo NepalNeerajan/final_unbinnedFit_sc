@@ -44,7 +44,11 @@ using namespace std;
 using namespace RooFit;
 using namespace RooStats;
 
-void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, Int_t NeuNo, char *decayFile, char* bkgFile, double st = 5, double et = 10000, Int_t neuEff_par = 0){
+void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, Int_t NeuNo, char *decayFile, char* bkgFile, double st = 5, double et = 10000, Int_t neuEff_par = 0, Double_t binwidth = 5.0){
+
+  //in the fit_program, bin width added to draw the decay spectra (remember not for fitting!!!) on Jan 16,2023
+
+
   Int_t massA = AtNo + NeuNo;
   TString isoName = isoSym + massA;
     cout<<"I am going to fit the isotope which has"<<endl;
@@ -426,8 +430,9 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
     fOut = new TFile(foutname,"recreate");
     
     //for binning part
-    RooBinning tbins(5,10000);
-    tbins.addUniform(1999,5,10000);
+    RooBinning tbins(st,et);
+    Int_t no_of_bins = (et-st)/binwidth;
+    tbins.addUniform(no_of_bins,st,et);
 
     //plots and residuals
     RooPlot *xframet = decay_time.frame(Title("Total decay"));
@@ -727,14 +732,18 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
     
 
     
-    
-    RooBinning tbins2(5,1000);
-    tbins2.addUniform(199,5,1000);
+    //todo: check this in cmich computer//TODO    
+    RooBinning tbins2(-10000,et);
+    //to consider the negative time too
+    no_of_bins_all = et+10000; //lowest negative time is -10 s or 10,000 ms
+
+    //total number of bins is same as 
+    tbins2.addUniform(no_of_bins_all,-10000,et); //st meaning fit start time and et means fit end time
     
     //for plots and pulls
     RooPlot *xframetp = decay_time.frame(Title("Total decay"));
     decaydata->plotOn(xframetp, Binning(tbins2),DataError(RooAbsData::SumW2));
-    fitddata.plotOn(xframetp,LineColor(kBlue));
+    fitddata.plotOn(xframetp,LineColor(kBlue), Range(st,et));
     RooHist *residualtp = xframet->residHist();
     RooPlot *xframet_rp = decay_time.frame(Title("Residual"));
     xframet_rp->addPlotable(residualtp,"P* X0");
@@ -742,21 +751,21 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
     
     RooPlot *xframe0p = decay_time.frame(Title("Decay with 0 neutron emission"));
     decaydata->plotOn(xframe0p,Cut("neu_mult==neu_mult::0neutron"),Binning(tbins2),DataError(RooAbsData::SumW2));
-    fitddata.plotOn(xframe0p,Slice(neu_mult,"0neutron"),LineColor(kBlue));
+    fitddata.plotOn(xframe0p,Slice(neu_mult,"0neutron"),LineColor(kBlue), Range(st,et));
     RooHist *residual0p = xframe0p->residHist();
     RooPlot *xframe0_rp = decay_time.frame(Title("Residual"));
     xframe0_rp->addPlotable(residual0p,"P* X0");
 
     RooPlot *xframe1p = decay_time.frame(Title("Decay with 1 neutron emission"));
     decaydata->plotOn(xframe1p,Cut("neu_mult==neu_mult::1neutron"),Binning(tbins2),DataError(RooAbsData::SumW2));
-    fitddata.plotOn(xframe1p,Slice(neu_mult,"1neutron"),LineColor(kBlue));
+    fitddata.plotOn(xframe1p,Slice(neu_mult,"1neutron"),LineColor(kBlue),Range(st,et));
     RooHist *residual1p = xframe1p->residHist();
     RooPlot *xframe1_rp = decay_time.frame(Title("Residual"));
     xframe1_rp->addPlotable(residual1p,"P* X0");
 
     RooPlot *xframe2p = decay_time.frame(Title("Decay with 2 neutron emission"));
     decaydata->plotOn(xframe2p,Cut("neu_mult==neu_mult::2neutron"),Binning(tbins2),DataError(RooAbsData::SumW2));
-    fitddata.plotOn(xframe2p,Slice(neu_mult,"2neutron"),LineColor(kBlue));
+    fitddata.plotOn(xframe2p,Slice(neu_mult,"2neutron"),LineColor(kBlue),Range(st,et));
     RooHist *residual2p = xframe2->residHist();
     RooPlot *xframe2_rp = decay_time.frame(Title("Residual"));
     xframe2_rp->addPlotable(residual2p,"P* X0");
