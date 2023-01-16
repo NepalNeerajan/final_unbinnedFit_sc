@@ -735,7 +735,7 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
     //todo: check this in cmich computer//TODO    
     RooBinning tbins2(-10000,et);
     //to consider the negative time too
-    no_of_bins_all = et+10000; //lowest negative time is -10 s or 10,000 ms
+    Int_t no_of_bins_all = et+10000; //lowest negative time is -10 s or 10,000 ms
 
     //total number of bins is same as 
     tbins2.addUniform(no_of_bins_all,-10000,et); //st meaning fit start time and et means fit end time
