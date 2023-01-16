@@ -528,13 +528,13 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
     chisqua=2*chisqua;
     cout<<"chi2 = "<<chisqua<<endl;
     cout<<"ndf="<<res->floatParsFinal().getSize()<<endl;
-    cout<<"chisquare/ndf="<<chisqua/(1999-res->floatParsFinal().getSize())<<endl;
-    Double_t chi2_over_ndf = chisqua/(1999-res->floatParsFinal().getSize());
+    Int_t n_bins_hist_total = hist_total->GetN();
+    cout<<"chisquare/ndf="<<chisqua/(n_bins_hist_total-res->floatParsFinal().getSize())<<endl;
+    Double_t chi2_over_ndf = chisqua/(n_bins_hist_total-res->floatParsFinal().getSize());
     //1999 is total bins from 5 to 10000 ms
     //lets check if GetNbinsX provides the total number of bins with the given range
-    Int_t test1 = hist_total->GetNbinsX();
+    //Int_t test1 = hist_total->GetNbinsX(); GetNbinsX() is not a member of RooHist , use GetN() to get the number of bins
     Int_t test2 = hist_total->GetN();
-    cout<<"test1 NbinsX = "<<test1<<endl;
     cout<<"test2 N = "<<test2<<endl;    
 
 
@@ -544,7 +544,7 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
     for (Int_t i=0;i<hist_n1->GetN();i++){
         Double_t xi_n1=hist_n1->GetX()[i];
         Double_t yi_n1=hist_n1->GetY()[i];
-        Double_t yeval_n1=curve_n1->Eval(xi);
+        Double_t yeval_n1=curve_n1->Eval(xi_n1);
         Double_t reldev_n1=yeval_n1-yi_n1;
 	if(yi_n1 !=0 && yeval_n1 != 0) logVal_n1 = TMath::Log(yi_n1/yeval_n1); else logVal_n1 = 0;
        	chiVal_n1=yeval_n1-yi_n1+yi_n1*logVal_n1;
@@ -553,8 +553,9 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
    chisqua_n1=2*chisqua_n1;
    cout<<"chi2 = "<<chisqua_n1<<endl;
    cout<<"ndf="<<res->floatParsFinal().getSize()<<endl;
-   cout<<"chisquare/ndf for 1n emi ="<<chisqua_n1/(1999-res->floatParsFinal().getSize())<<endl;
-   Double_t chi2_over_ndf_n1 = chisqua_n1/(1999-res->floatParsFinal().getSize());
+   Int_t n_bins_hist_n1 = hist_n1->GetN();
+   cout<<"chisquare/ndf for 1n emi ="<<chisqua_n1/(n_bins_hist_n1-res->floatParsFinal().getSize())<<endl;
+   Double_t chi2_over_ndf_n1 = chisqua_n1/(n_bins_hist_n1-res->floatParsFinal().getSize());
 
 
    //for decay spectra with 2n emission
@@ -563,7 +564,7 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
    for (Int_t i=0;i<hist_n2->GetN();i++){
      Double_t xi_n2=hist_n2->GetX()[i];
      Double_t yi_n2=hist_n2->GetY()[i];
-     Double_t yeval_n2=curve_n2->Eval(xi);
+     Double_t yeval_n2=curve_n2->Eval(xi_n2);
      Double_t reldev_n2=yeval_n2-yi_n2;
      if(yi_n2 !=0 && yeval_n2 != 0) logVal_n2 = TMath::Log(yi_n2/yeval_n2); else logVal_n2 = 0;
      chiVal_n2=yeval_n2-yi_n2+yi_n2*logVal_n2;
@@ -572,8 +573,9 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
    chisqua_n2=2*chisqua_n2;
    cout<<"chi2 = "<<chisqua_n2<<endl;
    cout<<"ndf="<<res->floatParsFinal().getSize()<<endl;
-   cout<<"chisquare/ndf for 2n emi ="<<chisqua_n2/(1999-res->floatParsFinal().getSize())<<endl;
-   Double_t chi2_over_ndf_n2 = chisqua_n2/(1999-res->floatParsFinal().getSize());
+   Int_t n_bins_hist_n2 = hist_n2->GetN();
+   cout<<"chisquare/ndf for 2n emi ="<<chisqua_n2/(n_bins_hist_n2-res->floatParsFinal().getSize())<<endl;
+   Double_t chi2_over_ndf_n2 = chisqua_n2/(n_bins_hist_n2-res->floatParsFinal().getSize());
     
     
     cout<<"///////////////////////////////"<<endl;
@@ -1133,7 +1135,7 @@ void fit_program(TString isoSym, TString dauSym, TString gdauSym, Int_t AtNo, In
     myfile<<"bkg2 = "<<bkg2.getVal()<<endl;
     myfile<<"bkg3 = "<<bkg3.getVal()<<endl;
 
-    myfile<<"test1 NbinsX= "<<test1<<endl;
+    //myfile<<"test1 NbinsX= "<<test1<<endl;
     myfile<<"test2 N= "<<test2<<endl;
 
     myfile<<"\n\n\n Used fitting parameters ---->"<<endl;

@@ -1,0 +1,46 @@
+result copy to spreadsheet
+HL	HL ErrL	HL ErrH	P1n	P1n ErrL	P1n ErrH	P2n	P2n ErrL	P2n ErrHchi2/ndf
+13.9933	-3.89671	3.89671	76.333	-16.0704	16.0704	4.06429e-08	-4.25876	4.25876	0.68473
+
+chi2 over ndf from total decay curve = 0.68473
+
+Neutron Efficiency par for this fit  = 0
+0 means effective neutron eff
+1 means lower band uncertainty of neutron eff
+2 means higher band uncertainty of neutron eff
+Neu Eff = 0.6199
+Neu Eff of for two delayed neutrons = 0.6476
+N0 = 112467
+Half-life = 13.9933 ms
+Half-life error Hi =3.89671
+Half-life error Lo =-3.89671
+Prob of 1 neu emi =0.76333
+Prob of 1 neu emi error Hi =0.160704
+Prob of 1 neu emi error Lo =-0.160704
+Prob of 2 neu emi =4.06429e-10
+Prob of 2 neu emi error Hi =0.0425876
+Prob of 2 neu emi error Lo =-0.0425876
+bkg1 = 88.0483
+bkg2 = 6.35687
+bkg3 = 8.77498e-08
+test2 N= 1999
+
+
+
+ Used fitting parameters ---->
+
+
+Isotope A, T_1/2 = 0	P1n = 0	P2n = 0
+Isotope B, T_1/2 = 29.4572	P1n = 72.3629	P2n = 4.69841
+Isotope C, T_1/2 = 80	P1n = 3.7	P2n = 0
+Isotope D, T_1/2 = 201.6	P1n = 14.1	P2n = 0
+Isotope E, T_1/2 = 40.0971	P1n = 82.6696	P2n = 0.468701
+Isotope F, T_1/2 = 114	P1n = 2.87	P2n = 0
+Isotope G, T_1/2 = 378	P1n = 8.8	P2n = 0
+Isotope H, T_1/2 = 58.2685	P1n = 60.5847	P2n = 0.83252
+Isotope I, T_1/2 = 211	P1n = 1.11	P2n = 0
+Isotope J, T_1/2 = 2704	P1n = 10.39	P2n = 0
+Isotope K, T_1/2 = 1284	P1n = 1.99	P2n = 0
+Isotope L, T_1/2 = 5850
+r1 = 0
+r2 = 0

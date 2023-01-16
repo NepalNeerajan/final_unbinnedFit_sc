@@ -3,8 +3,11 @@ date: Jan 13, 2023
 TO DO:
 (1) calculate chi2/ndf for all three decay histograms
 done, in local computer
-remains, to check in cmich computer
+to do: to check in cmich computer and confirm result comparing with previous results
 
 (2) get number of degrees of freedom consistently (rather than hard coded)
+done, in cmich computer
+todo: if result match with previous results
+
 (3) all plot with fit residuals going up to 10 second (or the upper limit of fit)
 (4) add histogram of negative times and plot on tto of it the background function; it could be tricky! 
