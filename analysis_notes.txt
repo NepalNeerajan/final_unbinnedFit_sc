@@ -14,3 +14,4 @@ done: fit range and defination from function, hard-coded method is now removed
 
 (4) add histogram of negative times and plot on tto of it the background function; it could be tricky! 
 added negative time, but need to check in cmich computer weather it work or not (there could be conflict in the resiudal histograms), still need to find a way to plot background function top of it
+there are errors because of the negative timing, check again @jan16
